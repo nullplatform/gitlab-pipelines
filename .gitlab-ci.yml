@@ -1,5 +1,6 @@
 variables:
   API_URL: "https://dummy.restapiexample.com/api/"
+  PILU: "INICIAL"
 
 stages:
   - request_and_capture
@@ -16,6 +17,7 @@ request_and_capture:
     - MESSAGE=$(echo $RESPONSE | jq -r '.message')
     - export PABLO=$(echo $RESPONSE | jq -r '.message')
     - PILU="pilu"
+    - PILU: "SEGUNDO"
     - echo $PABLO
     - echo $RESPONSE
     - echo $MESSAGE

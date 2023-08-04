@@ -7,8 +7,6 @@ stages:
 
 request_and_capture:
   stage: request_and_capture
-  environment:
-    PILU2: "PILU2"
   before_script:
     - apt-get update
     - apt-get --assume-yes install jq
@@ -31,3 +29,4 @@ request_and_capture:
     - if: $CI_COMMIT_BRANCH == "master"
       variables:
         RESPONSE_VARIABLE: $RESPONSE
+        PILU4: "PILU4"

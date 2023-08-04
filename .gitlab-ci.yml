@@ -2,14 +2,13 @@ variables:
   API_URL: "https://dummy.restapiexample.com/api/"
   PILU: "INICIAL"
 
-environment:
-  PILU2: "PILU2"
-
 stages:
   - request_and_capture
 
 request_and_capture:
   stage: request_and_capture
+  environment:
+    PILU2: "PILU2"
   before_script:
     - apt-get update
     - apt-get --assume-yes install jq

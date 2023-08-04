@@ -4,6 +4,7 @@ variables:
 
 stages:
   - request_and_capture
+  - deploy
 
 request_and_capture:
   stage: request_and_capture
@@ -30,3 +31,6 @@ request_and_capture:
       variables:
         RESPONSE_VARIABLE: $RESPONSE
         PILU4: "PILU4"
+
+
+deploy

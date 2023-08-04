@@ -1,6 +1,5 @@
 variables:
   API_URL: "https://dummy.restapiexample.com/api/"
-  PABLO: "INICIAL"
 
 stages:
   - request_and_capture

@@ -15,6 +15,7 @@ request_and_capture:
     - RESPONSE=$(curl -s "$API_URL/v1/employees")
     - MESSAGE=$(echo $RESPONSE | jq -r '.message')
     - export PABLO=$(echo $RESPONSE | jq -r '.message')
+    - PILU="pilu"
     - echo $PABLO
     - echo $RESPONSE
     - echo $MESSAGE

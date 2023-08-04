@@ -15,7 +15,7 @@ request_and_capture:
     - echo $BUILD_AWS_REGION
     - RESPONSE=$(curl -s "$API_URL/v1/employees")
     - MESSAGE=$(echo $RESPONSE | jq -r '.message')
-    - PABLO=$(echo $RESPONSE | jq -r '.message')
+    - PABLO: $(echo $RESPONSE | jq -r '.message')
     - echo $RESPONSE
     - echo $MESSAGE
     - echo $MESSAGES

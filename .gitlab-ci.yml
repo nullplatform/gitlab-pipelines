@@ -1,0 +1,26 @@
+variables:
+  API_URL: "https://dummy.restapiexample.com/api/"
+
+stages:
+  - request_and_capture
+
+request_and_capture:
+  stage: request_and_capture
+  before_script:
+    - apt-get update
+    - apt-get --assume-yes install jq
+  script:
+    - echo $BUILD_AWS_ACCESS_KEY
+    - echo $BUILD_AWS_REGION
+    - RESPONSE=$(curl -s "$API_URL/v1/employees")
+    - MESSAGE=$(echo $RESPONSE | jq -r '.message')
+    - MESSAGES=$(echo $RESPONSE | jq -r '.message')
+    - echo $RESPONSE
+    - echo $MESSAGE
+    - echo $MESSAGES
+    - echo $PATH
+  # Set the response as a CI/CD variable
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        RESPONSE_VARIABLE: $RESPONSE

@@ -1,11 +1,11 @@
 stages:
-  - build
+  - null_login
 
 variables:
   API_URL: "https://dummy.restapiexample.com/api/v1/employee/$NULL_TOKEN"
 
 null_login:
-  stage: build
+  stage: null_login
   image: curlimages/curl:latest
   script:
     - RESPONSE=$(curl -o api_response.txt "$API_URL")

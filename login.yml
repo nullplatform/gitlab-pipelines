@@ -15,7 +15,7 @@ null_login:
     - echo "$RESPONSE" > api_response.txt
     - echo "$encription_key"
     - echo "$encription_key" | base64 -d > temp_encryption.key
-    - openssl enc -aes-256-cbc -salt -in api_response.txt -out api_response.enc -pass file:temp_encryption.key
+    - openssl enc -aes-256-cbc -salt -in api_response.txt -out api_response.enc -pass file:$encription_key
   artifacts:
     paths:
       - api_response.enc

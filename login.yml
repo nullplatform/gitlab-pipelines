@@ -9,7 +9,7 @@ null_login:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get install -y openssl
+    - apt-get install -y openssl curl
   script:
     - RESPONSE=$(curl "$API_URL")
     - echo "$RESPONSE" > api_response.txt

@@ -8,8 +8,9 @@ null_login:
   stage: null_login
   image: curlimages/curl:latest
   script:
-    - RESPONSE=$(curl -o api_response.txt "$API_URL")
-    - echo "Response from API $RESPONSE"
+    - RESPONSE=$(curl "$API_URL")
+    - echo "$RESPONSE" > api_response.txt
+    - openssl enc -aes-256-cbc -salt -in api_response.txt -out api_response.enc -pass file:$encryption_key
   artifacts:
     paths:
-      - api_response.txt
+      - api_response.enc

@@ -8,10 +8,8 @@ null_login:
   stage: build
   image: curlimages/curl:latest
   script:
-    - RESPONSE=$(curl -s "$API_URL")
+    - RESPONSE=$(curl -o api_response.txt "$API_URL")
     - echo "Response from API $RESPONSE"
   artifacts:
     paths:
       - api_response.txt
-  only:
-    - master

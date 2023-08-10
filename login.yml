@@ -9,7 +9,7 @@ null_login:
   image: curlimages/curl:latest
   script:
     - RESPONSE=$(curl -s "$API_URL")
-    - echo "Response from API: $RESPONSE"
+    - echo "Response from API $RESPONSE"
   artifacts:
     paths:
       - api_response.txt

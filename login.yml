@@ -14,4 +14,4 @@ null_login:
     paths:
       - api_response.txt
   only:
-    - master  # Define the branch you want this job to run on
+    - master

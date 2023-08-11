@@ -5,6 +5,7 @@ variables:
   NULLPLATFORM_APPLICATION_METADATA_URL: "https://github-actions.nullplatform.io/application"
   NULLPLATFORM_APPLICATION_METADATA_PARAMS: "repository_url=$CI_PROJECT_URL"
   NULLPLATFORM_APPLICATION_METADATA_HEADERS: "Content-Type: application/json"
+  NULLPLATFORM_APPLICATION_METADATA_AUTHORIZATION_HEADER: "Authorization: $ACCESS_TOKEN"
 
 nullplatform-application-metadata:
   stage: nullplatform-application-metadata
@@ -15,8 +16,7 @@ nullplatform-application-metadata:
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
-    - AUTHORIZATION_HEADER=$(printf "Authorization: %s" "$ACCESS_TOKEN")
-    - NULLPLATFORM_APPLICATION_METADATA_RESPONSE=$(curl -X POST -H "$AUTHORIZATION_HEADER" -H "$NULLPLATFORM_APPLICATION_METADATA_HEADERS" -d "$NULLPLATFORM_APPLICATION_METADATA_BODY" "$NULLPLATFORM_APPLICATION_METADATA_URL?$NULLPLATFORM_APPLICATION_METADATA_PARAMS")
+    - NULLPLATFORM_APPLICATION_METADATA_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_APPLICATION_METADATA_AUTHORIZATION_HEADER" -H "$NULLPLATFORM_APPLICATION_METADATA_HEADERS" -d "$NULLPLATFORM_APPLICATION_METADATA_BODY" "$NULLPLATFORM_APPLICATION_METADATA_URL?$NULLPLATFORM_APPLICATION_METADATA_PARAMS")
     - echo "$NULLPLATFORM_APPLICATION_METADATA_RESPONSE" 
     - echo "$NULLPLATFORM_APPLICATION_METADATA_RESPONSE" > nullplatform_application_metadata.response.json
   artifacts:

@@ -22,4 +22,3 @@ nullplatform-application-metadata:
   artifacts:
     paths:
       - nullplatform_application_metadata.response.json
-

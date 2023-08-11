@@ -1,0 +1,19 @@
+stages:
+  - nullplatform-login
+
+variables:
+  API_URL: "https://dummy.restapiexample.com/api/v1/employee/$NULL_TOKEN"
+
+nullplatform-login:
+  stage: nullplatform-login
+  image: ubuntu:latest
+  before_script:
+    - apt-get update
+    - apt-get install -y openssl curl
+  script:
+    - RESPONSE=$(curl "$API_URL")
+    - echo "$RESPONSE" > api_response.txt
+    - openssl enc -iter 1000 -aes-256-cbc -salt -in api_response.txt -out api_response.enc -pass file:$encription_key
+  artifacts:
+    paths:
+      - api_response.enc

@@ -1,0 +1,18 @@
+stages:
+  - nullplatform-application-metadata
+
+variables:
+  NULLPLATFORM_APPLICATION_METADATA_URL: "https://github-actions.nullplatform.io/application"
+  NULLPLATFORM_APPLICATION_METADATA_PARAMS: repository_url=$CI_PROJECT_URL
+  NULLPLATFORM_APPLICATION_METADATA_HEADERS: "Content-Type: application/json"
+
+nullplatform-application-metadata:
+  stage: nullplatform-application-metadata
+  image: ubuntu:latest
+  before_script:
+    - apt-get update
+    - apt-get install -y openssl curl
+  script:
+    - NULLPLATFORM_APPLICATION_METADATA_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_APPLICATION_METADATA_HEADERS" -d "$NULLPLATFORM_APPLICATION_METADATA_BODY" "$NULLPLATFORM_APPLICATION_METADATA_URL?$NULLPLATFORM_APPLICATION_METADATA_PARAMS")
+    - echo "$NULLPLATFORM_APPLICATION_METADATA_RESPONSE" 
+

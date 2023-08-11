@@ -14,7 +14,7 @@ nullplatform-application-metadata:
     - apt-get install -y openssl curl jq
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
-    - AUTHORIZATION_TOKEN="Authorization: $ACCESS_TOKEN"
+    - AUTHORIZATION_TOKEN=$(echo "Authorization: $ACCESS_TOKEN")
   script:
     - echo $AUTHORIZATION_TOKEN
     - NULLPLATFORM_APPLICATION_METADATA_RESPONSE=$(curl -X POST -H "$AUTHORIZATION_TOKEN" -H "$NULLPLATFORM_APPLICATION_METADATA_HEADERS" -d "$NULLPLATFORM_APPLICATION_METADATA_BODY" "$NULLPLATFORM_APPLICATION_METADATA_URL?$NULLPLATFORM_APPLICATION_METADATA_PARAMS")

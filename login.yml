@@ -13,9 +13,7 @@ null_login:
   script:
     - RESPONSE=$(curl "$API_URL")
     - echo "$RESPONSE" > api_response.txt
-    - echo "$encription_key"
     - openssl enc -aes-256-cbc -salt -in api_response.txt -out api_response.enc -pass file:$encription_key
   artifacts:
     paths:
       - api_response.enc
-      - api_response2.enc

@@ -2,7 +2,7 @@ stages:
   - nullplatform-login
 
 variables:
-  API_URL: "https://dummy.restapiexample.com/api/v1/employee/$NULL_TOKEN"
+  NULLPLATFORM_LOGIN_URL: "https://github-actions.nullplatform.io/login"
 
 nullplatform-login:
   stage: nullplatform-login
@@ -11,9 +11,11 @@ nullplatform-login:
     - apt-get update
     - apt-get install -y openssl curl
   script:
-    - RESPONSE=$(curl "$API_URL")
-    - echo "$RESPONSE" > api_response.txt
-    - openssl enc -iter 1000 -aes-256-cbc -salt -in api_response.txt -out api_response.enc -pass file:$encription_key
+    - curl -X POST \
+        -H "Content-Type: application/json" \
+        -d "{\"token\": \"$NULLPLATFORM_APIKEY\"}" \
+        $NULLPLATFORM_LOGIN_URL > nullplatform_login.response.json
+    - openssl enc -iter 1000 -aes-256-cbc -salt -in nullplatform_login.response.json -out nullplatform_login.response.json.enc -pass file:$encription_key
   artifacts:
     paths:
-      - api_response.enc
+      - nullplatform_login.response.json.enc

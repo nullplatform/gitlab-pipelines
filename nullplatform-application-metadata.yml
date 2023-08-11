@@ -11,7 +11,7 @@ nullplatform-application-metadata:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get install -y openssl curl
+    - apt-get install -y openssl curl jq
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
     - TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:

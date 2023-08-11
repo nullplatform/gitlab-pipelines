@@ -1,11 +1,11 @@
 stages:
-  - null_login
+  - login-nullplatform
 
 variables:
   API_URL: "https://dummy.restapiexample.com/api/v1/employee/$NULL_TOKEN"
 
-null_login:
-  stage: null_login
+login-nullplatform:
+  stage: login-nullplatform
   image: ubuntu:latest
   before_script:
     - apt-get update

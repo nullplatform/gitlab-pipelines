@@ -1,0 +1,19 @@
+stages:
+  - nullplatform-build
+
+variables:
+  NULLPLATFORM_BUILD_URL: "https://github-actions.nullplatform.io/build"
+  NULLPLATFORM_BUILD_HEADERS: "Content-Type: application/json"
+
+nullplatform-build:
+  stage: nullplatform-build
+  image: ubuntu:latest
+  before_script:
+    - apt-get update
+    - apt-get install -y openssl curl jq
+    - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
+    - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
+  script:
+    - cat nullplatform_application_metadata.json | jq -c '.[]' | while IFS= read -r line; do
+        echo $line
+      done

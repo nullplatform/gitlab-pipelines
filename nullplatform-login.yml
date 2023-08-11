@@ -12,7 +12,7 @@ nullplatform-login:
     - apt-get update
     - apt-get install -y openssl curl
   script:
-    - echo $NULLPLATFORM_LOGIN_BODY
+    - NULL_PLATFORM_LOGIN_RESPONSE=$(curl -X POST -d "$NULLPLATFORM_LOGIN_BODY" $NULLPLATFORM_LOGIN_URL)
     - echo "$NULL_PLATFORM_LOGIN_RESPONSE" > nullplatform_login.response.json
     - openssl enc -iter 1000 -aes-256-cbc -salt -in nullplatform_login.response.json -out nullplatform_login.response.json.enc -pass file:$encription_key
   artifacts:

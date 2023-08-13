@@ -14,6 +14,11 @@ nullplatform-build:
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
-    - cat nullplatform_application_metadata.json | jq -c '.[]' | while IFS= read -r line; do
-        echo $line
+    - jq -r '.[].id' nullplatform_application_metadata.json | while read -r id; do
+        body="{\"application_id\": $id, \"commit\": {\"id\": \"$CI_COMMIT_SHA\", \"permalink\": \"https://github.com/kwik-e-mart/demo-application/commit/2b5fb0390d9a10925c9c3f117e1ab57d5aab6b27\"},\"description\": \"$CI_COMMIT_TITLE\",\"branch\": \"$CI_COMMIT_BRANCH\"}"
+        NULLPLATFORM_BUILD_RESPONSE=$(curl -X POST \
+          -H "$NULLPLATFORM_BUILD_HEADERS" \
+          -H "Authorization:Bearer $ACCESS_TOKEN" \
+          -d "$body" \
+          $NULLPLATFORM_BUILD_URL
       done

@@ -18,7 +18,7 @@ nullplatform-build-update:
       jq -r '.[].id' nullplatform-build-create.json | while read -r id; do
         NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"in_progress\"}"
         NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
-        echo "$NULLPLATFORM_BUILD_UPDATE_RESPONSE\n" >> nullplatform-build-update.json
+        echo $"$NULLPLATFORM_BUILD_UPDATE_RESPONSE\n" >> nullplatform-build-update.json
       done
   artifacts:
     paths:

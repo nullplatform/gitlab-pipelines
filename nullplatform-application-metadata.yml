@@ -20,3 +20,4 @@ nullplatform-application-metadata:
   artifacts:
     paths:
       - nullplatform_application_metadata.json
+    expire_in: 30 min

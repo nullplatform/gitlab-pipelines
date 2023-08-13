@@ -15,7 +15,7 @@ nullplatform-build:
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
     - jq -r '.[].id' nullplatform_application_metadata.json | while read -r id; do
-        body="{\"application_id\": $id, \"commit\": {\"id\": \"$CI_COMMIT_SHA\", \"permalink\": \"https://github.com/kwik-e-mart/demo-application/commit/2b5fb0390d9a10925c9c3f117e1ab57d5aab6b27\"},\"description\": \"$CI_COMMIT_TITLE\",\"branch\": \"$CI_COMMIT_BRANCH\"}"
+        body="{\"application_id\":$id, \"commit\":{\"id\":\"$CI_COMMIT_SHA\", \"permalink\":\"https://github.com/kwik-e-mart/demo-application/commit/2b5fb0390d9a10925c9c3f117e1ab57d5aab6b27\"},\"description\":\"$CI_COMMIT_TITLE\",\"branch\":\"$CI_COMMIT_BRANCH\"}"
         NULLPLATFORM_BUILD_RESPONSE=$(curl -X POST \
           -H "$NULLPLATFORM_BUILD_HEADERS" \
           -H "Authorization:Bearer $ACCESS_TOKEN" \

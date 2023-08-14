@@ -14,5 +14,4 @@ nullplatform-asset-docker-image-build-and-push:
     - |+ 
       while IFS= read -r line; do
         echo $line
-        read -ra env_vars <<< "$line"
       done < assets-to-create.txt

@@ -20,13 +20,27 @@ nullplatform-asset-docker-image-create:
         APPLICATION_ID=$(echo "$line" | jq -r '.application_id')
         NULLPLATFORM_ASSET_CREATE_BODY="{\"type\":\"docker-image\",\"metadata\":{}}"
         NULLPLATFORM_ASSET_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_ASSET_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_ASSET_CREATE_BODY" $NULLPLATFORM_URL/build/$BUILD_ID/asset)
-        NULLPLATFORM_APPLICATION_PARAMETERS=$(curl -H "Authorization:Bearer $ACCESS_TOKEN" $NULLPLATFORM_URL/application/$APPLICATION_ID/parameter)
-        echo $NULLPLATFORM_APPLICATION_PARAMETERS
         for ASSET_URL in $(echo "$$NULLPLATFORM_ASSET_CREATE_RESPONSE" | jq -r '.targets[].url'); do
           echo $ASSET_URL
-          #aws ecr get-login-password --region $BUILD_AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-          #docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          #docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          NULLPLATFORM_APPLICATION_PARAMETERS=$(curl -H "Authorization:Bearer $ACCESS_TOKEN" $NULLPLATFORM_URL/application/$APPLICATION_ID/parameter)
+          echo $NULLPLATFORM_APPLICATION_PARAMETERS
+          for parameter in $(echo "$NULLPLATFORM_APPLICATION_PARAMETERS" | jq -c '.[]'); do
+            name=$(echo "$parameter" | jq -r '.name')
+            value=$(echo "$parameter" | jq -r '.value')
+            if [ "$value" != "null" ]; then
+              eval "$name=\"$value\""
+            fi
+          done
+          echo "BUILD_AWS_ACCESS_KEY: $BUILD_AWS_ACCESS_KEY"
+          echo "BUILD_AWS_SECRET_ACCESS_KEY: $BUILD_AWS_SECRET_ACCESS_KEY"
+          echo "BUILD_AWS_REGION: $BUILD_AWS_REGION"
+
+          AWS_ACCESS_KEY_ID="$BUILD_AWS_ACCESS_KEY"
+          AWS_SECRET_ACCESS_KEY="$BUILD_AWS_SECRET_ACCESS_KEY"
+          ECR_REGISTRY=$(echo "$ASSET_URL" | cut -d '/' -f 1)
+          aws ecr get-login-password --region $BUILD_AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+          docker build -t $ASSET_URL .
+          #docker push $ASSET_URL
         done
         echo $NULLPLATFORM_ASSET_CREATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json

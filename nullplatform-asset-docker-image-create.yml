@@ -10,10 +10,12 @@ nullplatform-asset-docker-image-create:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get install -y openssl curl jq docker unzip
+    - apt-get install -y openssl curl jq unzip
     - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     - unzip awscliv2.zip
     - ./aws/install
+    - curl -fsSL https://get.docker.com -o get-docker.sh
+    - sh ./get-docker.sh
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
@@ -34,14 +36,17 @@ nullplatform-asset-docker-image-create:
               eval "$name=\"$value\""
             fi
           done
-          echo "BUILD_AWS_ACCESS_KEY: $BUILD_AWS_ACCESS_KEY"
-          echo "BUILD_AWS_SECRET_ACCESS_KEY: $BUILD_AWS_SECRET_ACCESS_KEY"
-          echo "BUILD_AWS_REGION: $BUILD_AWS_REGION"
-
           AWS_ACCESS_KEY_ID="$BUILD_AWS_ACCESS_KEY"
           AWS_SECRET_ACCESS_KEY="$BUILD_AWS_SECRET_ACCESS_KEY"
+          AWS_DEFAULT_REGION="$BUILD_AWS_REGION"
           ECR_REGISTRY=$(echo "$ASSET_URL" | cut -d '/' -f 1)
-          aws ecr get-login-password --region $BUILD_AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+          echo "AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION"
+          export AWS_ACCESS_KEY_ID
+          export AWS_SECRET_ACCESS_KEY
+          export AWS_DEFAULT_REGION
+          aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
           docker build -t $ASSET_URL .
           #docker push $ASSET_URL
         done

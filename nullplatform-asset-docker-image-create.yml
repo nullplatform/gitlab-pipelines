@@ -5,7 +5,7 @@ variables:
   NULLPLATFORM_ASSET_URL: "https://ci.nullplatform.com/build" #build/:id/asset
   NULLPLATFORM_ASSET_HEADERS: "Content-Type: application/json"
 
-nullplatform-build-create:
+nullplatform-asset-docker-image-create:
   stage: nullplatform-asset-docker-image-create
   image: ubuntu:latest
   before_script:

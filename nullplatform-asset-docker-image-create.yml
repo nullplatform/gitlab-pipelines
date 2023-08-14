@@ -1,5 +1,6 @@
 stages:
   - nullplatform-asset-docker-image-create
+  - nullplatform-asset-docker-image-build-and-push
 
 variables:
   NULLPLATFORM_URL: "https://ci.nullplatform.com" #build/:id/asset
@@ -47,19 +48,3 @@ nullplatform-asset-docker-image-create:
       - nullplatform-asset-create.json
       - assets-to-create.txt
     expire_in: 30 min
-
-nullplatform-asset-docker-image-build-and-push:
-  image: docker:stable
-  stage: nullplatform-asset-docker-image-build-and-push
-  services:
-    - docker:dind
-  before_script:
-    - apk add --no-cache python3 py3-pip
-    - pip3 install --no-cache-dir awscli
-  script:
-    - cat assets-to-create.txt
-    - #aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-    - #docker build -t $ASSET_URL .
-    - #docker push $ASSET_URL
-  dependencies: 
-    - nullplatform-asset-docker-image-create

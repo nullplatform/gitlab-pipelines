@@ -1,0 +1,29 @@
+stages:
+  - nullplatform-asset-docker-image-create
+
+variables:
+  NULLPLATFORM_ASSET_URL: "https://ci.nullplatform.com/build" #build/:id/asset
+  NULLPLATFORM_ASSET_HEADERS: "Content-Type: application/json"
+
+nullplatform-build-create:
+  stage: nullplatform-asset-docker-image-create
+  image: ubuntu:latest
+  before_script:
+    - apt-get update
+    - apt-get install -y openssl curl jq
+    - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
+    - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
+  script:
+    - |+
+      while IFS= read -r line; do
+        BUILD_ID=$(echo "$line" | jq -r '.id')
+        NULLPLATFORM_ASSET_CREATE_BODY="{\"type\":\"docker_image\"}"
+        NULLPLATFORM_ASSET_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_ASSET_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_ASSET_CREATE_BODY" $NULLPLATFORM_ASSET_URL/$BUILD_ID/asset)
+        echo $NULLPLATFORM_ASSET_CREATE_RESPONSE
+        printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json
+      done < nullplatform-build-create.json 
+  artifacts:
+    paths:
+      - nullplatform-asset-create.json
+    expire_in: 30 min
+

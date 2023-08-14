@@ -1,0 +1,29 @@
+stages:
+  - nullplatform-build-finalize
+
+variables:
+  NULLPLATFORM_BUILD_URL: "https://ci.nullplatform.com/build"
+  NULLPLATFORM_BUILD_HEADERS: "Content-Type: application/json"
+
+nullplatform-build-finalize:
+  stage: nullplatform-build-finalize
+  image: ubuntu:latest
+  before_script:
+    - apt-get update
+    - apt-get install -y openssl curl jq
+    - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
+    - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
+  script:
+    - |+
+      while IFS= read -r line; do
+        id=$(echo "$line" | jq -r '.id')
+        NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"successful\"}"
+        NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
+        echo $NULLPLATFORM_BUILD_UPDATE_RESPONSE
+        printf "%s\n" $NULLPLATFORM_BUILD_UPDATE_RESPONSE >> nullplatform-build-finalize.json
+      done < nullplatform-build-create.json
+  artifacts:
+    paths:
+      - nullplatform-build-finalize.json
+    expire_in: 30 min
+

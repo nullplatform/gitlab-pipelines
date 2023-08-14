@@ -13,10 +13,9 @@ nullplatform-asset-docker-image-build-and-push:
     - cat assets-to-create.txt
     - |+ 
       while IFS= read -r line; do
-        read -ra parts <<< "$line"
-        declare -A env_vars
-        for (( i = 0; i < ${#parts[@]}; i+=2 )); do
-          export ${parts[i]}=${parts[i+1]}
+        read -ra env_vars <<< "$line"
+        for env_var in "${env_vars[@]}"; do
+          export "$env_var"
         done
         echo $AWS_DEFAULT_REGION
         aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY

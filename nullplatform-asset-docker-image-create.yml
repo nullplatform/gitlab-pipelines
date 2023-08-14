@@ -42,8 +42,9 @@ nullplatform-asset-docker-image-create:
         echo $NULLPLATFORM_ASSET_CREATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json
       done < nullplatform-build-create.json 
+    - openssl enc -iter 1000 -aes-256-cbc -salt -in assets-to-create.txt -out assets-to-create.txt.enc -pass file:$encription_key
   artifacts:
     paths:
       - nullplatform-asset-create.json
-      - assets-to-create.txt
+      - assets-to-create.txt.enc
     expire_in: 30 min

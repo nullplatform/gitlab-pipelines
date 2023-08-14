@@ -11,6 +11,3 @@ nullplatform-asset-docker-image-build-and-push:
     - pip3 install --no-cache-dir awscli
   script:
     - cat assets-to-create.txt
-    - #aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-    - #docker build -t $ASSET_URL .
-    - #docker push $ASSET_URL

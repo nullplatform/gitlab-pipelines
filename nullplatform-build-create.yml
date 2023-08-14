@@ -2,7 +2,7 @@ stages:
   - nullplatform-build-create
 
 variables:
-  NULLPLATFORM_BUILD_URL: "https://github-actions.nullplatform.io/build"
+  NULLPLATFORM_BUILD_URL: "https://ci.nullplatform.com/build"
   NULLPLATFORM_BUILD_HEADERS: "Content-Type: application/json"
 
 nullplatform-build-create:

@@ -2,7 +2,7 @@ stages:
   - nullplatform-build-update
 
 variables:
-  NULLPLATFORM_BUILD_URL: "https://github-actions.nullplatform.io/build"
+  NULLPLATFORM_BUILD_URL: "https://ci.nullplatform.com/build"
   NULLPLATFORM_BUILD_HEADERS: "Content-Type: application/json"
 
 nullplatform-build-update:
@@ -18,10 +18,12 @@ nullplatform-build-update:
     - |+
       while IFS= read -r line; do
         id=$(echo "$line" | jq -r '.id')
+        echo $id
         NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"in_progress\"}"
         NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
+        echo $NULLPLATFORM_BUILD_UPDATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_BUILD_UPDATE_RESPONSE >> nullplatform-build-update.json
-      done < "nullplatform-build-create.json"
+      done < nullplatform-build-create.json
   artifacts:
     paths:
       - nullplatform-build-update.json

@@ -2,7 +2,7 @@ stages:
   - nullplatform-application-metadata
 
 variables:
-  NULLPLATFORM_APPLICATION_METADATA_URL: "https://github-actions.nullplatform.io/application"
+  NULLPLATFORM_APPLICATION_METADATA_URL: "https://ci.nullplatform.com/application"
   NULLPLATFORM_APPLICATION_METADATA_PARAMS: "repository_url=$CI_PROJECT_URL"
   NULLPLATFORM_APPLICATION_METADATA_HEADERS: "Content-Type: application/json"
 

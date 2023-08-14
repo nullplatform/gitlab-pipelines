@@ -2,7 +2,7 @@ stages:
   - nullplatform-login
 
 variables:
-  NULLPLATFORM_LOGIN_URL: "https://github-actions.nullplatform.io/login"
+  NULLPLATFORM_LOGIN_URL: "https://ci.nullplatform.com/login"
   NULLPLATFORM_LOGIN_HEADERS: "Content-Type: application/json"
   NULLPLATFORM_LOGIN_BODY: "{\"token\": \"$NULLPLATFORM_APIKEY\"}"
 

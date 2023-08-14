@@ -8,6 +8,8 @@ variables:
 nullplatform-asset-docker-image-create:
   stage: nullplatform-asset-docker-image-create
   image: ubuntu:latest
+  services:
+    - docker:dind
   before_script:
     - apt-get update
     - apt-get install -y openssl curl jq unzip

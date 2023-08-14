@@ -14,11 +14,12 @@ nullplatform-asset-docker-image-build-and-push:
       while IFS= read -r line; do
         for env_var in $line 
         do
+          echo $env_var
           export "$env_var"
         done
         echo $AWS_DEFAULT_REGION
         echo $AWS_SECRET_ACCESS_KEY
-        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
+        aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
         docker build -t $ASSET_URL .
         docker push $ASSET_URL
       done < assets-to-create.txt

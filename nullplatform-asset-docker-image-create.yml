@@ -42,7 +42,7 @@ nullplatform-asset-docker-image-create:
           ECR_REGISTRY=$(echo "$ASSET_URL" | cut -d '/' -f 1)
           aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
           docker build -t $ASSET_URL .
-          #docker push $ASSET_URL
+          docker push $ASSET_URL
         done
         echo $NULLPLATFORM_ASSET_CREATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json

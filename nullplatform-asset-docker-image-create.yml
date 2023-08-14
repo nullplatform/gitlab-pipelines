@@ -17,7 +17,7 @@ nullplatform-asset-docker-image-create:
     - |+
       while IFS= read -r line; do
         BUILD_ID=$(echo "$line" | jq -r '.id')
-        NULLPLATFORM_ASSET_CREATE_BODY="{\"type\":\"docker_image\"}"
+        NULLPLATFORM_ASSET_CREATE_BODY="{\"type\":\"docker-image\"}"
         NULLPLATFORM_ASSET_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_ASSET_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_ASSET_CREATE_BODY" $NULLPLATFORM_ASSET_URL/$BUILD_ID/asset)
         echo $NULLPLATFORM_ASSET_CREATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json

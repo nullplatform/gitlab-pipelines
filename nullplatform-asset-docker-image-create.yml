@@ -10,7 +10,10 @@ nullplatform-asset-docker-image-create:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get install -y openssl curl jq aws docker
+    - apt-get install -y openssl curl jq docker unzip
+    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    - unzip awscliv2.zip
+    - ./aws/install
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:

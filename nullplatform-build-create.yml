@@ -19,9 +19,11 @@ nullplatform-build-create:
       jq -r '.[].id' nullplatform_application_metadata.json | while read -r id; do
         NULLPLATFORM_BUILD_CREATE_BODY="{\"application_id\":$id, \"commit\":{\"id\":\"$CI_COMMIT_SHA\", \"permalink\":\"https://github.com/kwik-e-mart/demo-application/commit/2b5fb0390d9a10925c9c3f117e1ab57d5aab6b27\"},\"description\":\"$CI_COMMIT_TITLE\",\"branch\":\"$CI_COMMIT_BRANCH\"}"
         NULLPLATFORM_BUILD_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_CREATE_BODY" $NULLPLATFORM_BUILD_URL)
-        BUILD_RESPONSES+=(NULLPLATFORM_BUILD_CREATE_RESPONSE)
+        echo $NULLPLATFORM_BUILD_CREATE_RESPONSE
+        BUILD_RESPONSES+=($NULLPLATFORM_BUILD_CREATE_RESPONSE)
         printf "%s\n" $NULLPLATFORM_BUILD_CREATE_RESPONSE >> nullplatform-build-create.json
       done
+    - echo $BUILD_RESPONSES
     - BUILD_RESPONSES_JSON=$(printf '%s\n' "${BUILD_RESPONSES[@]}" | jq -R . | jq -s .) 
     - echo $BUILD_RESPONSES_JSON
     - echo $BUILD_RESPONSES_JSON > nullplatform-build-create.json

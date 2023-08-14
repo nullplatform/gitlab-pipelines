@@ -14,14 +14,10 @@ nullplatform-build-update:
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
-    - cat nullplatform-build-create.json
     - |+
       while IFS= read -r line; do
         id=$(echo "$line" | jq -r '.id')
-        echo $id
         NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"in_progress\"}"
-        CURL="curl -X PATCH -H \"$NULLPLATFORM_BUILD_HEADERS\" -H \"Authorization:Bearer $ACCESS_TOKEN\" -d \"$NULLPLATFORM_BUILD_UPDATE_BODY\" $NULLPLATFORM_BUILD_URL/$id" 
-        echo $CURL
         NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
         echo $NULLPLATFORM_BUILD_UPDATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_BUILD_UPDATE_RESPONSE >> nullplatform-build-update.json

@@ -10,7 +10,6 @@ nullplatform-asset-docker-image-build-and-push:
     - apk add --no-cache python3 py3-pip
     - pip3 install --no-cache-dir awscli
   script:
-    - cat assets-to-create.txt
     - |+ 
       while IFS= read -r line; do
         for env_var in $line 
@@ -18,7 +17,8 @@ nullplatform-asset-docker-image-build-and-push:
           export "$env_var"
         done
         echo $AWS_DEFAULT_REGION
-        aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+        echo $AWS_SECRET_ACCESS_KEY
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
         docker build -t $ASSET_URL .
         docker push $ASSET_URL
       done < assets-to-create.txt

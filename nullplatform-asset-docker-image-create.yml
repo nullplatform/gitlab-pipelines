@@ -12,7 +12,7 @@ nullplatform-asset-docker-image-create:
   before_script:
     - apt-get update
     - apt-get install -y openssl curl jq
-    - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -pass file:$encription_key
+    - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
     - |+
@@ -42,7 +42,7 @@ nullplatform-asset-docker-image-create:
         echo $NULLPLATFORM_ASSET_CREATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json
       done < nullplatform-build-create.json 
-    - openssl enc -iter 1000 -aes-256-cbc -salt -in assets-to-create.txt -out assets-to-create.txt.enc -pass file:$encription_key
+    - openssl enc -iter 1000 -aes-256-cbc -salt -in assets-to-create.txt -out assets-to-create.txt.enc -k "$NULLPLATFORM_ENCRIPTION_KEY"
   artifacts:
     paths:
       - nullplatform-asset-create.json

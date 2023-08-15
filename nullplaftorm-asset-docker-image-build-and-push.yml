@@ -10,7 +10,7 @@ nullplatform-asset-docker-image-build-and-push:
     - apk add --no-cache python3 py3-pip openssl
     - pip3 install --no-cache-dir awscli
   script:
-    - openssl enc -d -iter 1000 -aes-256-cbc -in assets-to-create.txt.enc -out assets-to-create.txt -pass file:$encription_key
+    - openssl enc -d -iter 1000 -aes-256-cbc -in assets-to-create.txt.enc -out assets-to-create.txt -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - |+ 
       while IFS= read -r line; do
         for env_var in $line 

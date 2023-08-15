@@ -15,8 +15,11 @@ nullplatform-build-create:
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
     - |+
-      jq -r '.[].id' nullplatform_application_metadata.json | while read -r id; do
-        NULLPLATFORM_BUILD_CREATE_BODY="{\"application_id\":$id, \"commit\":{\"id\":\"$CI_COMMIT_SHA\", \"permalink\":\"https://gitlab.com\"},\"description\":\"$CI_COMMIT_TITLE\",\"branch\":\"$CI_COMMIT_BRANCH\"}"
+      for application in $(cat nullplatform_application_metadata.json | jq -c '.[]'); do
+        application_id=$(echo "$application" | jq -r '.id')
+        code_repository_url=$(echo "$application" | jq -r '.code_repository.url')
+        permalink="$code_repository_url/-/commit/$CI_COMMIT_SHA"
+        NULLPLATFORM_BUILD_CREATE_BODY="{\"application_id\":$application_id, \"commit\":{\"id\":\"$CI_COMMIT_SHA\", \"permalink\":\"$permalink\"},\"description\":\"$CI_COMMIT_TITLE\",\"branch\":\"$CI_COMMIT_BRANCH\"}"
         NULLPLATFORM_BUILD_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_CREATE_BODY" $NULLPLATFORM_BUILD_URL)
         printf "%s\n" $NULLPLATFORM_BUILD_CREATE_RESPONSE >> nullplatform-build-create.json
       done

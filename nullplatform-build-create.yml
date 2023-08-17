@@ -15,7 +15,8 @@ nullplatform-build-create:
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
     - |+
-      for application in $(cat nullplatform_application_metadata.json | jq -c '.[]'); do
+      application_metadata=$(cat nullplatform_application_metadata.json)
+      for application in $(printf "%s" $application_metadata | jq -c '.[]'); do
         application_id=$(printf "%s" "$application" | jq -r '.id')
         code_repository_url=$(printf "%s" "$application" | jq -r '.code_repository.url')
         permalink="$code_repository_url/-/commit/$CI_COMMIT_SHA"

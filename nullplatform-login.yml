@@ -4,21 +4,17 @@ stages:
 variables:
   NULLPLATFORM_LOGIN_URL: "https://ci.nullplatform.com/login"
   NULLPLATFORM_LOGIN_HEADERS: "Content-Type: application/json"
-  NULLPLATFORM_LOGIN_BODY: "{\"token\": \"$NULLPLATFORM_APIKEY\"}"
+  NULLPLATFORM_LOGIN_BODY: "{\"api_key\": \"$NULLPLATFORM_APIKEY\"}"
 
 nullplatform-login:
   stage: nullplatform-login
   image: ubuntu:latest
   before_script:
-    - echo "$NULLPLATFORM_LOGIN_BODY"
-    - echo "curl -X POST -H \"$NULLPLATFORM_LOGIN_HEADERS\" -d \"$NULLPLATFORM_LOGIN_BODY\" $NULLPLATFORM_LOGIN_URL"
     - apt-get update
     - apt-get install -y openssl curl
   script:
-    - echo "$NULLPLATFORM_LOGIN_BODY"
     - NULL_PLATFORM_LOGIN_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_LOGIN_HEADERS" -d "$NULLPLATFORM_LOGIN_BODY" $NULLPLATFORM_LOGIN_URL)
     - echo "$NULL_PLATFORM_LOGIN_RESPONSE" > nullplatform_login.response.json
-    - echo "$NULL_PLATFORM_LOGIN_RESPONSE"
     - openssl enc -iter 1000 -aes-256-cbc -salt -in nullplatform_login.response.json -out nullplatform_login.response.json.enc -k "$NULLPLATFORM_ENCRIPTION_KEY"
   artifacts:
     paths:

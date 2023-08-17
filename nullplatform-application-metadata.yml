@@ -10,6 +10,7 @@ nullplatform-application-metadata:
   stage: nullplatform-application-metadata
   image: ubuntu:latest
   before_script:
+    - echo "$NULLPLATFORM_APPLICATION_METADATA_PARAMS"
     - apt-get update
     - apt-get install -y openssl curl jq
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -k "$NULLPLATFORM_ENCRIPTION_KEY"

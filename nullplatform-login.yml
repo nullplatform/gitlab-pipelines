@@ -7,6 +7,8 @@ variables:
   NULLPLATFORM_LOGIN_BODY: "{\"api_key\": \"$NULLPLATFORM_APIKEY\"}"
 
 nullplatform-login:
+  tags:
+    - ${RUNNER_TAG}
   stage: nullplatform-login
   image: ubuntu:latest
   before_script:

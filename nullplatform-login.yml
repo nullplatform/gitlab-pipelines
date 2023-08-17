@@ -10,6 +10,7 @@ nullplatform-login:
   stage: nullplatform-login
   image: ubuntu:latest
   before_script:
+    - echo "$NULLPLATFORM_LOGIN_BODY"
     - apt-get update
     - apt-get install -y openssl curl
   script:

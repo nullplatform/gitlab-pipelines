@@ -16,8 +16,8 @@ nullplatform-build-create:
   script:
     - |+
       for application in $(cat nullplatform_application_metadata.json | jq -c '.[]'); do
-        application_id=$(echo "$application" | jq -r '.id')
-        code_repository_url=$(echo "$application" | jq -r '.code_repository.url')
+        application_id=$(printf "%s" "$application" | jq -r '.id')
+        code_repository_url=$(printf "%s" "$application" | jq -r '.code_repository.url')
         permalink="$code_repository_url/-/commit/$CI_COMMIT_SHA"
         NULLPLATFORM_BUILD_CREATE_BODY="{\"application_id\":$application_id, \"commit\":{\"id\":\"$CI_COMMIT_SHA\", \"permalink\":\"$permalink\"},\"description\":\"$CI_COMMIT_TITLE\",\"branch\":\"$CI_COMMIT_BRANCH\"}"
         NULLPLATFORM_BUILD_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_CREATE_BODY" $NULLPLATFORM_BUILD_URL)

@@ -11,6 +11,7 @@ nullplatform-login:
   image: ubuntu:latest
   before_script:
     - echo "$NULLPLATFORM_LOGIN_BODY"
+    - echo "curl -X POST -H \"$NULLPLATFORM_LOGIN_HEADERS\" -d \"$NULLPLATFORM_LOGIN_BODY\" $NULLPLATFORM_LOGIN_URL"
     - apt-get update
     - apt-get install -y openssl curl
   script:

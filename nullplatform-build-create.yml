@@ -24,7 +24,6 @@ nullplatform-build-create:
         NULLPLATFORM_BUILD_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_CREATE_BODY" $NULLPLATFORM_BUILD_URL)
         printf "%s\n" $NULLPLATFORM_BUILD_CREATE_RESPONSE >> nullplatform-build-create.json
       done
-    - cat nullplatform-build-create.json 
   artifacts:
     paths:
       - nullplatform-build-create.json

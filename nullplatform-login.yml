@@ -12,7 +12,7 @@ nullplatform-login:
     - apt-get update
     - apt-get install -y openssl curl
   script:
-    - NULL_PLATFORM_LOGIN_RESPONSE=$(curl --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_LOGIN_HEADERS" -d "{\"api_key\":\"$NULLPLATFORM_APIKEY\"}" $NULLPLATFORM_LOGIN_URL)
+    - NULL_PLATFORM_LOGIN_RESPONSE=$(curl --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_LOGIN_HEADERS" -d "{\"api_key\":\"$NULLPLATFORM_API_KEY\"}" $NULLPLATFORM_LOGIN_URL)
     - printf "%s" "$NULL_PLATFORM_LOGIN_RESPONSE" > nullplatform_login.response.json
     - openssl enc -iter 1000 -aes-256-cbc -salt -in nullplatform_login.response.json -out nullplatform_login.response.json.enc -k "$NULLPLATFORM_ENCRIPTION_KEY"
   artifacts:

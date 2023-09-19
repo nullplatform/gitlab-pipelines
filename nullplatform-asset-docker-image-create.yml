@@ -39,7 +39,6 @@ nullplatform-asset-docker-image-create:
           FILE_LINE=$(echo "ASSET_URL=$ASSET_URL AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION ECR_REGISTRY=$ECR_REGISTRY") 
           printf "%s %s %s %s %s\n" $FILE_LINE >> assets-to-create.txt
         done
-        echo $NULLPLATFORM_ASSET_CREATE_RESPONSE
         printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json
       done < nullplatform-build-create.json 
     - openssl enc -iter 1000 -aes-256-cbc -salt -in assets-to-create.txt -out assets-to-create.txt.enc -k "$NULLPLATFORM_ENCRIPTION_KEY"

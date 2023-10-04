@@ -1,6 +1,9 @@
 stages:
   - nullplatform-asset-docker-image-build-and-push
 
+variables:
+  DOCKER_HOST: "tcp://127.0.0.1:2375"
+
 nullplatform-asset-docker-image-build-and-push:
   image: docker:stable
   stage: nullplatform-asset-docker-image-build-and-push

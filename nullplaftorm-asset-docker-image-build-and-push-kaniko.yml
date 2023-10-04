@@ -1,16 +1,6 @@
 stages:
   - nullplatform-asset-docker-image-build-and-push
 
-nullplatform-get-assets:
-  image:
-    name: alpine:latest
-  stage: nullplatform-asset-docker-image-build-and-push
-  before_script:
-    - apk update
-    - apk add --no-cache openssl
-  script:
-    - openssl enc -d -iter 1000 -aes-256-cbc -in assets-to-create.txt.enc -out assets-to-create.txt -k "$NULLPLATFORM_ENCRIPTION_KEY"
-
 nullplatform-asset-docker-image-build-and-push:
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug

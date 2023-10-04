@@ -45,4 +45,4 @@ nullplatform-asset-docker-image-create:
     paths:
       - nullplatform-asset-create.json
       - assets-to-create.txt
-    expire_in: 30 min
+    expire_in: 10 min

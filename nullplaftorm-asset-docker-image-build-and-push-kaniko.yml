@@ -6,9 +6,6 @@ nullplatform-asset-docker-image-build-and-push:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
     entrypoint: [""]
   stage: nullplatform-asset-docker-image-build-and-push
-  before_script:
-    - apk add --no-cache python3 py3-pip openssl
-    - pip3 install --no-cache-dir awscli
   script:
     - openssl enc -d -iter 1000 -aes-256-cbc -in assets-to-create.txt.enc -out assets-to-create.txt -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - |+ 

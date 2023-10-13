@@ -1,0 +1,47 @@
+stages:
+  - nullplatform-asset-lambda-create
+  - nullplatform-asset-lambda-build-and-push
+
+variables:
+  NULLPLATFORM_URL: "https://ci.nullplatform.com" #build/:id/asset
+  NULLPLATFORM_ASSET_HEADERS: "Content-Type: application/json"
+
+nullplatform-asset-lambda-create:
+  stage: nullplatform-asset-lambda-create
+  image: ubuntu:latest
+  before_script:
+    - apt-get update
+    - apt-get install -y openssl curl jq
+    - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -k "$NULLPLATFORM_ENCRIPTION_KEY"
+    - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
+  script:
+    - |+
+      while IFS= read -r line; do
+        BUILD_ID=$(echo "$line" | jq -r '.id')
+        APPLICATION_ID=$(echo "$line" | jq -r '.application_id')
+        NULLPLATFORM_ASSET_CREATE_BODY="{\"type\":\"lambda\",\"metadata\":{}}"
+        NULLPLATFORM_ASSET_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_ASSET_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_ASSET_CREATE_BODY" $NULLPLATFORM_URL/build/$BUILD_ID/asset)
+        for ASSET_URL in $(echo "$NULLPLATFORM_ASSET_CREATE_RESPONSE" | jq -r '.targets[].url'); do
+          NULLPLATFORM_APPLICATION_PARAMETERS=$(curl -H "Authorization:Bearer $ACCESS_TOKEN" $NULLPLATFORM_URL/application/$APPLICATION_ID/parameter)
+          echo $NULLPLATFORM_APPLICATION_PARAMETERS
+          for parameter in $(echo "$NULLPLATFORM_APPLICATION_PARAMETERS" | jq -c '.[]'); do
+            name=$(echo "$parameter" | jq -r '.name')
+            value=$(echo "$parameter" | jq -r '.value')
+            if [ "$value" != "null" ]; then
+              eval "$name=\"$value\""
+            fi
+          done
+          AWS_ACCESS_KEY_ID="$BUILD_AWS_ACCESS_KEY"
+          AWS_SECRET_ACCESS_KEY="$BUILD_AWS_SECRET_ACCESS_KEY"
+          AWS_DEFAULT_REGION="$BUILD_AWS_REGION"
+          FILE_LINE=$(echo "ASSET_URL=$ASSET_URL AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION") 
+          printf "%s %s %s %s %s\n" $FILE_LINE >> assets-to-create.txt
+        done
+        printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json
+      done < nullplatform-build-create.json 
+    - openssl enc -iter 1000 -aes-256-cbc -salt -in assets-to-create.txt -out assets-to-create.txt.enc -k "$NULLPLATFORM_ENCRIPTION_KEY"
+  artifacts:
+    paths:
+      - nullplatform-asset-create.json
+      - assets-to-create.txt.enc
+    expire_in: 30 min

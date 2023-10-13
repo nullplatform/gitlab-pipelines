@@ -48,9 +48,7 @@ nullplatform-asset-lambda-build-and-push:
       ASSET_TYPE=lamda
       ASSET_TARGET_URL: ''
       if [ "$[[inputs.command ]]" != "make" ]; then
-        $[[inputs.command ]] \
-        $[[inputs.arguments ]] \
-        $[[inputs.options ]]
+        echo "different of make"
       else
         make_file_path="$build-working-directory"
         make_file_task="build"

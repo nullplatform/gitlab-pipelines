@@ -8,6 +8,7 @@ spec:
       default: build
     asset-name:
       default: main
+---
 
 stages:
   - nullplatform-asset-lambda-build-and-push

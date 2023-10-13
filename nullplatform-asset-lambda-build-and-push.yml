@@ -4,7 +4,7 @@ spec:
     asset-working-directory:
     asset-output-directory:
     asset-name:
-      default: name
+      default: main
 
 stages:
   - nullplatform-asset-lambda-build-and-push

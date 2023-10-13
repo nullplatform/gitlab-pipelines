@@ -1,5 +1,7 @@
 spec:
   inputs:
+    command:
+      default: make
     build-working-directory:
       default: .
     asset-working-directory:

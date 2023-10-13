@@ -2,6 +2,10 @@ spec:
   inputs:
     command:
       default: make
+    arguments:
+      default: build
+    options:
+      default: ''
     build-working-directory:
       default: .
     asset-working-directory:

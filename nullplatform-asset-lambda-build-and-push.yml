@@ -1,8 +1,11 @@
 spec:
   inputs:
     build-working-directory:
+      default: .
     asset-working-directory:
+      default: .
     asset-output-directory:
+      default: build
     asset-name:
       default: main
 

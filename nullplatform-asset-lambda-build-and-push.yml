@@ -24,7 +24,7 @@ nullplatform-asset-lambda-build-and-push:
   image: ubuntu:latest
   stage: nullplatform-asset-lambda-build-and-push
   before_script:
-    - "$[[ ci-before-script ]]"
+    - $[[ inputs.ci-before-script ]]
   script:
     - |+
       # Sanitize function

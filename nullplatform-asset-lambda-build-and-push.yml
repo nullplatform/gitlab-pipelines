@@ -56,9 +56,7 @@ nullplatform-asset-lambda-build-and-push:
       if [ "$[[ inputs.command ]]" != "make" ]; then
         echo "different of make"
       else
-        echo $build-working-directory
-        echo $make_file_path
-        make_file_path="$build-working-directory"
+        make_file_path="$build_working_directory"
         make_file_task="build"
       
         build_command="make -C $make_file_path"

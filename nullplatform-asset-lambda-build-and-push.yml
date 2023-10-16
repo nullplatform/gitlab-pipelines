@@ -1,6 +1,5 @@
 spec:
   inputs:
-    ci-image:
     ci-before-script:
     command:
       default: make

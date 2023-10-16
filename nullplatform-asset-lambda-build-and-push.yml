@@ -24,7 +24,7 @@ nullplatform-asset-lambda-build-and-push:
   stage: nullplatform-asset-lambda-build-and-push
   before_script:
     - apt-get update
-    - apt-get install -y python3 python3-pip openssl
+    - apt-get install -y python3 python3-pip openssl npm
     - pip3 install --no-cache-dir awscli
   script:
     - |+

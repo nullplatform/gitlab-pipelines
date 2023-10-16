@@ -7,10 +7,9 @@ variables:
 
 nullplatform-login:
   stage: nullplatform-login
-  image: ubuntu:latest
+  image: alpine:latest
   before_script:
-    - apt-get update
-    - apt-get install -y openssl curl
+    - apk add --no-cache openssl curl
   script:
     - NULL_PLATFORM_LOGIN_RESPONSE=$(curl --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_LOGIN_HEADERS" -d "{\"api_key\":\"$NULLPLATFORM_API_KEY\"}" $NULLPLATFORM_LOGIN_URL)
     - printf "%s" "$NULL_PLATFORM_LOGIN_RESPONSE" > nullplatform_login.response.json

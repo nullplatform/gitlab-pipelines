@@ -38,7 +38,6 @@ nullplatform-asset-lambda-build-and-push:
         # Remove trailing slashes
         path="${path%/}"
         echo "$path"
-        return $path
       }
       # Sanitize paths
       echo "$[[ inputs.build-working-directory ]]"

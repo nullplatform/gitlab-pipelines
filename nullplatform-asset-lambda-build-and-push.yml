@@ -1,5 +1,6 @@
 spec:
   inputs:
+    ci-image:
     ci-before-script:
     command:
       default: make
@@ -21,7 +22,7 @@ stages:
   - nullplatform-asset-lambda-build-and-push
 
 nullplatform-asset-lambda-build-and-push:
-  image: ubuntu:latest
+  image: $[[ inputs.ci-image ]]
   stage: nullplatform-asset-lambda-build-and-push
   before_script:
     - $[[ inputs.ci-before-script ]]

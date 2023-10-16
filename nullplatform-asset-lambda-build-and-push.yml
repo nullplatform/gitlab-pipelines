@@ -40,6 +40,7 @@ nullplatform-asset-lambda-build-and-push:
         echo "$path"
       }
       # Sanitize paths
+      echo "$[[ inputs.build-working-directory ]]"
       build_working_directory=$(sanitize_path "$[[ inputs.build-working-directory ]]")
       asset_working_directory=$(sanitize_path "$[[ inputs.asset-working-directory ]]")
       asset_output_directory=$(sanitize_path "$[[  inputs.asset-output-directory ]]")

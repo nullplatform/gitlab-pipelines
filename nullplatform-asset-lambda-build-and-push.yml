@@ -22,7 +22,7 @@ stages:
   - nullplatform-asset-lambda-build-and-push
 
 nullplatform-asset-lambda-build-and-push:
-  image: "$[[ inputs.ci-image ]]"
+  image: ubuntu:latest
   stage: nullplatform-asset-lambda-build-and-push
   before_script:
     - "$[[ ci-before-script ]]"

@@ -10,7 +10,7 @@ nullplatform-asset-lambda-create:
   stage: nullplatform-asset-lambda-create
   image: alpine:latest
   before_script:
-    - apk add --no-cache openssl curl
+    - apk add --no-cache openssl curl jq
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:

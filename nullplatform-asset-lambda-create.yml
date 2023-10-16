@@ -8,10 +8,9 @@ variables:
 
 nullplatform-asset-lambda-create:
   stage: nullplatform-asset-lambda-create
-  image: ubuntu:latest
+  image: alpine:latest
   before_script:
-    - apt-get update
-    - apt-get install -y openssl curl jq
+    - apk add --no-cache openssl curl
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
@@ -38,7 +37,7 @@ nullplatform-asset-lambda-create:
           printf "%s %s %s %s %s\n" $FILE_LINE >> assets-to-create.txt
         done
         printf "%s\n" $NULLPLATFORM_ASSET_CREATE_RESPONSE >> nullplatform-asset-create.json
-      done < nullplatform-build-create.json 
+      done < nullplatform-build-create.json
     - openssl enc -iter 1000 -aes-256-cbc -salt -in assets-to-create.txt -out assets-to-create.txt.enc -k "$NULLPLATFORM_ENCRIPTION_KEY"
   artifacts:
     paths:

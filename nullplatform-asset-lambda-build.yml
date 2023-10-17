@@ -52,7 +52,6 @@ nullplatform-asset-lambda-build:
       ASSET_OUTPUT_DIRECTORY="$asset_working_directory/$asset_output_directory"
       ASSET_NAME=$[[ inputs.asset-name ]]
       ASSET_TYPE=lambda
-      ASSET_TARGET_URL=''
       if [ "$[[ inputs.command ]]" != "make" ]; then
         echo "different of make"
       else
@@ -79,3 +78,8 @@ nullplatform-asset-lambda-build:
         ASSET_TYPE=$ASSET_TYPE \
         ASSET_TARGET_URL=''
       fi
+
+  artifacts:
+    paths:
+      - $ASSET_OUTPUT_DIRECTORY
+    expire_in: 30 min

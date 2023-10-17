@@ -47,6 +47,11 @@ nullplatform-asset-lambda-push:
     - openssl enc -d -iter 1000 -aes-256-cbc -in assets-to-create.txt.enc -out assets-to-create.txt -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - |+
       #push
+      BUILD_WORKING_DIRECTORY=$build_working_directory
+      ASSET_WORKING_DIRECTORY=$asset_working_directory
+      ASSET_OUTPUT_DIRECTORY="$asset_working_directory/$asset_output_directory"
+      ASSET_NAME=$[[ inputs.asset-name ]]
+      ASSET_TYPE=lambda
       make_file_path="$build_working_directory"
       make_file_task="push"
       while IFS= read -r line; do
@@ -55,9 +60,10 @@ nullplatform-asset-lambda-push:
           export "$env_var"
         done
         make -C $make_file_path $make_file_task \
-          BUILD_WORKING_DIRECTORY=$build_working_directory \
-          ASSET_WORKING_DIRECTORY=$asset_working_directory \
-          ASSET_OUTPUT_DIRECTORY=$asset_output_directory \
-          ASSET_NAME=$asset-name \
-          ASSET_TYPE=$lambda
+          BUILD_WORKING_DIRECTORY=$BUILD_WORKING_DIRECTORY \
+          ASSET_WORKING_DIRECTORY=$ASSET_WORKING_DIRECTORY \
+          ASSET_OUTPUT_DIRECTORY=$ASSET_OUTPUT_DIRECTORY \
+          ASSET_NAME=$ASSET_NAME \
+          ASSET_TYPE=$ASSET_TYPE
+          ASSET_TARGET_URL=$ASSET_URL
       done < assets-to-create.txt

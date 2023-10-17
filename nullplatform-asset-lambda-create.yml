@@ -22,7 +22,6 @@ nullplatform-asset-lambda-create:
         NULLPLATFORM_ASSET_CREATE_RESPONSE=$(curl -X POST -H "$NULLPLATFORM_ASSET_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_ASSET_CREATE_BODY" $NULLPLATFORM_URL/build/$BUILD_ID/asset)
         for ASSET_URL in $(echo "$NULLPLATFORM_ASSET_CREATE_RESPONSE" | jq -r '.targets[].url'); do
           NULLPLATFORM_APPLICATION_PARAMETERS=$(curl -H "Authorization:Bearer $ACCESS_TOKEN" $NULLPLATFORM_URL/application/$APPLICATION_ID/parameter)
-          echo $NULLPLATFORM_APPLICATION_PARAMETERS
           for parameter in $(echo "$NULLPLATFORM_APPLICATION_PARAMETERS" | jq -c '.[]'); do
             name=$(echo "$parameter" | jq -r '.name')
             value=$(echo "$parameter" | jq -r '.value')

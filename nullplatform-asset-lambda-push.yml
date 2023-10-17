@@ -58,6 +58,7 @@ nullplatform-asset-lambda-push:
       while IFS= read -r line; do
         for env_var in $line 
         do
+          echo $env_var
           export "$env_var"
         done
         make -C $make_file_path $make_file_task \

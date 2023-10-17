@@ -19,11 +19,11 @@ spec:
 ---
 
 stages:
-  - nullplatform-asset-lambda-build-and-push
+  - nullplatform-asset-lambda-push
 
-nullplatform-asset-lambda-build-and-push:
+nullplatform-asset-lambda-push:
   image: $[[ inputs.ci-image ]]
-  stage: nullplatform-asset-lambda-build-and-push
+  stage: nullplatform-asset-lambda-push
   before_script:
     - $[[ inputs.ci-before-script ]]
   script:

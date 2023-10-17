@@ -54,6 +54,7 @@ nullplatform-asset-lambda-push:
       ASSET_TYPE=lambda
       make_file_path="$build_working_directory"
       make_file_task="push"
+      cat assets-to-create.txt
       while IFS= read -r line; do
         for env_var in $line 
         do

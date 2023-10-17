@@ -81,5 +81,5 @@ nullplatform-asset-lambda-build:
 
   artifacts:
     paths:
-      - $ASSET_OUTPUT_DIRECTORY
+      - "$[[ inputs.asset-working-directory ]]/$[[ inputs.asset-working-directory ]]"
     expire_in: 30 min

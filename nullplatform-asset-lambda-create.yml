@@ -3,6 +3,9 @@ stages:
   - nullplatform-asset-lambda-build-and-push
 
 variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
   NULLPLATFORM_URL: "https://ci.nullplatform.com" #build/:id/asset
   NULLPLATFORM_ASSET_HEADERS: "Content-Type: application/json"
 

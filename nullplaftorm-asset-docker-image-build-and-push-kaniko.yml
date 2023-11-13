@@ -1,6 +1,11 @@
 stages:
   - nullplatform-asset-docker-image-build-and-push
 
+variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
+
 nullplatform-asset-docker-image-build-and-push:
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug

@@ -21,6 +21,11 @@ spec:
 stages:
   - nullplatform-asset-lambda-build
 
+variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
+
 nullplatform-asset-lambda-build:
   image: $[[ inputs.ci-image ]]
   stage: nullplatform-asset-lambda-build

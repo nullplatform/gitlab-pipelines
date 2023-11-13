@@ -2,6 +2,9 @@ stages:
   - nullplatform-build-finalize
 
 variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
   NULLPLATFORM_BUILD_URL: "https://ci.nullplatform.com/build"
   NULLPLATFORM_BUILD_HEADERS: "Content-Type: application/json"
 

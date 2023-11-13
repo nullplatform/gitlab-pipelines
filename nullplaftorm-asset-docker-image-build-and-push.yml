@@ -1,6 +1,11 @@
 stages:
   - nullplatform-asset-docker-image-build-and-push
 
+variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
+
 nullplatform-asset-docker-image-build-and-push:
   image: docker:stable
   stage: nullplatform-asset-docker-image-build-and-push

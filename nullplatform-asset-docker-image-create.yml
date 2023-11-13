@@ -42,7 +42,7 @@ nullplatform-asset-docker-image-create:
             FILE_LINE=$(echo "ASSET_URL=$ASSET_URL ASSET_REPOSITORY_PROVIDER=$ASSET_REPOSITORY_PROVIDER BUILD_AZURE_REGISTRY_LOGIN_SERVER=$BUILD_AZURE_REGISTRY_LOGIN_SERVER BUILD_AZURE_REGISTRY_USERNAME=$BUILD_AZURE_REGISTRY_USERNAME BUILD_AZURE_REGISTRY_PASSWORD=$BUILD_AZURE_REGISTRY_PASSWORD")
           else
             echo "Asset repository provider '$ASSET_REPOSITORY_PROVIDER' is not supported yet"
-	          exit 1
+            exit 1
           fi
           printf "%s %s %s %s %s\n" $FILE_LINE >> assets-to-create.txt
         done

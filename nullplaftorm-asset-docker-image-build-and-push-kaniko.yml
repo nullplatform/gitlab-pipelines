@@ -1,6 +1,11 @@
 stages:
   - nullplatform-asset-docker-image-build-and-push
 
+variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
+
 nullplatform-asset-docker-image-build-and-push:
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
@@ -8,12 +13,20 @@ nullplatform-asset-docker-image-build-and-push:
   stage: nullplatform-asset-docker-image-build-and-push
   script:
     -  mkdir -p /kaniko/.docker
-    -  echo "{\"credsStore\":\"ecr-login\"}" > /kaniko/.docker/config.json
     - |+ 
       while IFS= read -r line; do
         for env_var in $line 
         do
           export "$env_var"
         done
+        if [ "$ASSET_REPOSITORY_PROVIDER" == "aws-ecr" ]; then
+          echo -n "{\"credsStore\":\"ecr-login\"}" > /kaniko/.docker/config.json
+        elif [ "$ASSET_REPOSITORY_PROVIDER" == "azure-container-registry" ]; then
+          BUILD_AZURE_REGISTRY_AUTH_TOKEN=$(echo -n "$BUILD_AZURE_REGISTRY_USERNAME:$BUILD_AZURE_REGISTRY_PASSWORD" | base64 | tr -d \\n)
+          echo -n "{\"auths\":{\"$BUILD_AZURE_REGISTRY_LOGIN_SERVER\":{\"auth\":\"$BUILD_AZURE_REGISTRY_AUTH_TOKEN\"}}}" > /kaniko/.docker/config.json
+        else
+          echo "Asset repository provider '$ASSET_REPOSITORY_PROVIDER' is not supported yet"
+          exit 1
+        fi
         /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $ASSET_URL
       done < assets-to-create.txt

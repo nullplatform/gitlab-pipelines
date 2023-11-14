@@ -2,6 +2,9 @@ stages:
   - nullplatform-login
 
 variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
   NULLPLATFORM_LOGIN_URL: "https://ci.nullplatform.com/login"
   NULLPLATFORM_LOGIN_HEADERS: "Content-Type: application/json"
 

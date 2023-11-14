@@ -1,14 +1,18 @@
 stages:
   - nullplatform-asset-docker-image-build-and-push
 
+variables:
+  RUNNER_TAG: $RUNNER_TAG
+  NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY
+  NULLPLATFORM_ENCRIPTION_KEY: $NULLPLATFORM_ENCRIPTION_KEY
+
 nullplatform-asset-docker-image-build-and-push:
   image: docker:stable
   stage: nullplatform-asset-docker-image-build-and-push
   services:
     - docker:dind
   before_script:
-    - apk add --no-cache python3 py3-pip openssl
-    - pip3 install --no-cache-dir awscli
+    - apk add --no-cache openssl
   script:
     - openssl enc -d -iter 1000 -aes-256-cbc -in assets-to-create.txt.enc -out assets-to-create.txt -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - |+ 
@@ -17,7 +21,16 @@ nullplatform-asset-docker-image-build-and-push:
         do
           export "$env_var"
         done
-        aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+        if [ "$ASSET_REPOSITORY_PROVIDER" == "aws-ecr" ]; then
+          apk add --no-cache python3 py3-pip
+          pip3 install --no-cache-dir awscli
+          aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+        elif [ "$ASSET_REPOSITORY_PROVIDER" == "azure-container-registry" ]; then
+          docker login --username $BUILD_AZURE_REGISTRY_USERNAME --password $BUILD_AZURE_REGISTRY_PASSWORD $BUILD_AZURE_REGISTRY_LOGIN_SERVER
+        else
+          echo "Asset repository provider '$ASSET_REPOSITORY_PROVIDER' is not supported yet"
+          exit 1
+        fi
         docker build -t $ASSET_URL .
         docker push $ASSET_URL
       done < assets-to-create.txt

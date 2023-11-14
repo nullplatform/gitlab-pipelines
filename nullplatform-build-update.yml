@@ -20,7 +20,7 @@ nullplatform-build-update:
       while IFS= read -r line; do
         id=$(echo "$line" | jq -r '.id')
         NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"in_progress\"}"
-        NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl --fail --verbose --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id 2>&1 | tail -n 1)
+        NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl --fail --verbose --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
         printf "%s\n" $NULLPLATFORM_BUILD_UPDATE_RESPONSE >> nullplatform-build-update.json
       done < nullplatform-build-create.json
   artifacts:

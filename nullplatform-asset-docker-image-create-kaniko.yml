@@ -23,11 +23,11 @@ nullplatform-asset-docker-image-create:
         BUILD_ID=$(echo "$line" | jq -r '.id')
         APPLICATION_ID=$(echo "$line" | jq -r '.application_id')
         NULLPLATFORM_ASSET_CREATE_BODY="{\"type\":\"docker-image\",\"metadata\":{},\"name\":\"main\"}"
-        NULLPLATFORM_ASSET_CREATE_RESPONSE=$(curl --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_ASSET_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_ASSET_CREATE_BODY" $NULLPLATFORM_URL/build/$BUILD_ID/asset 2>&1 | tail -n 1)
+        NULLPLATFORM_ASSET_CREATE_RESPONSE=$(curl --fail --verbose --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_ASSET_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_ASSET_CREATE_BODY" $NULLPLATFORM_URL/build/$BUILD_ID/asset 2>&1 | tail -n 1)
         for target in $(echo "$NULLPLATFORM_ASSET_CREATE_RESPONSE" | jq -rc '.targets[]'); do
           ASSET_URL=$(echo "$target" | jq -r '.url')
           ASSET_REPOSITORY_PROVIDER=$(echo "$target" | jq -r '.provider')
-          NULLPLATFORM_APPLICATION_PARAMETERS=$(curl --http1.1 --retry 3 --retry-connrefused --retry-all-errors -H "Authorization:Bearer $ACCESS_TOKEN" $NULLPLATFORM_URL/application/$APPLICATION_ID/parameter 2>&1 | tail -n 1)
+          NULLPLATFORM_APPLICATION_PARAMETERS=$(curl --fail --verbose --http1.1 --retry 3 --retry-connrefused --retry-all-errors -H "Authorization:Bearer $ACCESS_TOKEN" $NULLPLATFORM_URL/application/$APPLICATION_ID/parameter 2>&1 | tail -n 1)
           for parameter in $(echo "$NULLPLATFORM_APPLICATION_PARAMETERS" | jq -c '.[]'); do
             name=$(echo "$parameter" | jq -r '.name')
             value=$(echo "$parameter" | jq -r '.value')

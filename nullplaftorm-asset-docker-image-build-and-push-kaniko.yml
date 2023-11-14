@@ -22,7 +22,7 @@ nullplatform-asset-docker-image-build-and-push:
         if [ "$ASSET_REPOSITORY_PROVIDER" == "aws-ecr" ]; then
           echo -n "{\"credsStore\":\"ecr-login\"}" > /kaniko/.docker/config.json
         elif [ "$ASSET_REPOSITORY_PROVIDER" == "azure-container-registry" ]; then
-          BUILD_AZURE_REGISTRY_AUTH_TOKEN=$(echo -n "$BUILD_AZURE_REGISTRY_USERNAME:$BUILD_AZURE_REGISTRY_PASSWORD" | base64)
+          BUILD_AZURE_REGISTRY_AUTH_TOKEN=$(echo -n "$BUILD_AZURE_REGISTRY_USERNAME:$BUILD_AZURE_REGISTRY_PASSWORD" | base64 | tr -d \\n)
           echo -n "{\"auths\":{\"$BUILD_AZURE_REGISTRY_LOGIN_SERVER\":{\"auth\":\"$BUILD_AZURE_REGISTRY_AUTH_TOKEN\"}}}" > /kaniko/.docker/config.json
         else
           echo "Asset repository provider '$ASSET_REPOSITORY_PROVIDER' is not supported yet"

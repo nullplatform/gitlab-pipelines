@@ -14,7 +14,7 @@ nullplatform-login:
   before_script:
     - apk add --no-cache openssl curl
   script:
-    - NULL_PLATFORM_LOGIN_RESPONSE=$(curl --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_LOGIN_HEADERS" -d "{\"api_key\":\"$NULLPLATFORM_API_KEY\"}" $NULLPLATFORM_LOGIN_URL 2>&1 | tail -n 1)
+    - NULL_PLATFORM_LOGIN_RESPONSE=$(curl --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_LOGIN_HEADERS" -d "{\"api_key\":\"$NULLPLATFORM_API_KEY\"}" $NULLPLATFORM_LOGIN_URL 2>&1 | tail -n 1 | tr -d '\n')
     - printf "%s" "$NULL_PLATFORM_LOGIN_RESPONSE" > nullplatform_login.response.json
     - openssl enc -iter 1000 -aes-256-cbc -salt -in nullplatform_login.response.json -out nullplatform_login.response.json.enc -k "$NULLPLATFORM_ENCRIPTION_KEY"
   artifacts:

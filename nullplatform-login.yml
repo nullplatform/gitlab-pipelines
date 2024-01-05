@@ -21,3 +21,5 @@ nullplatform-login:
     paths:
       - nullplatform_login.response.json.enc
     expire_in: 30 min
+  except:
+    - tags

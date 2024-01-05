@@ -1,9 +1,6 @@
 stages:
   - nullplatform-login
 
-except:
-  - tags
-
 variables:
   RUNNER_TAG: $RUNNER_TAG
   NULLPLATFORM_API_KEY: $NULLPLATFORM_API_KEY

@@ -20,11 +20,12 @@ nullplatform-build-finalize:
       while IFS= read -r line; do
         id=$(echo "$line" | jq -r '.id')
         NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"successful\"}"
-        NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl --fail --verbose --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
+        NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl --fail --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
         printf "%s\n" $NULLPLATFORM_BUILD_UPDATE_RESPONSE >> nullplatform-build-finalize.json
       done < nullplatform-build-create.json
   artifacts:
     paths:
       - nullplatform-build-finalize.json
     expire_in: 30 min
-
+  except:
+    - tags

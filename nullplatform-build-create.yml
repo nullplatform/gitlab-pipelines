@@ -23,11 +23,12 @@ nullplatform-build-create:
         code_repository_url=$(printf "%s" "$application" | jq -r '.code_repository.url')
         permalink="$code_repository_url/-/commit/$CI_COMMIT_SHA"
         NULLPLATFORM_BUILD_CREATE_BODY="{\"application_id\":$application_id, \"commit\":{\"id\":\"$CI_COMMIT_SHA\", \"permalink\":\"$permalink\"},\"description\":\"$CI_COMMIT_TITLE\",\"branch\":\"$CI_COMMIT_BRANCH\"}"
-        NULLPLATFORM_BUILD_CREATE_RESPONSE=$(curl --fail --verbose --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_CREATE_BODY" $NULLPLATFORM_BUILD_URL)
+        NULLPLATFORM_BUILD_CREATE_RESPONSE=$(curl --fail --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X POST -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_CREATE_BODY" $NULLPLATFORM_BUILD_URL)
         printf "%s\n" $NULLPLATFORM_BUILD_CREATE_RESPONSE >> nullplatform-build-create.json
       done
   artifacts:
     paths:
       - nullplatform-build-create.json
     expire_in: 30 min
-
+  except:
+    - tags

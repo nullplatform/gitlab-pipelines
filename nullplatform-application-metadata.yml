@@ -17,9 +17,11 @@ nullplatform-application-metadata:
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
-    - NULLPLATFORM_APPLICATION_METADATA_RESPONSE=$(curl --fail --verbose --http1.1 --retry 3 --retry-connrefused --retry-all-errors -H "Authorization:Bearer $ACCESS_TOKEN" -H "$NULLPLATFORM_APPLICATION_METADATA_HEADERS" "$NULLPLATFORM_APPLICATION_METADATA_URL?$NULLPLATFORM_APPLICATION_METADATA_PARAMS")
+    - NULLPLATFORM_APPLICATION_METADATA_RESPONSE=$(curl --fail --http1.1 --retry 3 --retry-connrefused --retry-all-errors -H "Authorization:Bearer $ACCESS_TOKEN" -H "$NULLPLATFORM_APPLICATION_METADATA_HEADERS" "$NULLPLATFORM_APPLICATION_METADATA_URL?$NULLPLATFORM_APPLICATION_METADATA_PARAMS")
     - printf "%s" "$NULLPLATFORM_APPLICATION_METADATA_RESPONSE" > nullplatform_application_metadata.json
   artifacts:
     paths:
       - nullplatform_application_metadata.json
     expire_in: 30 min
+  except:
+    - tags

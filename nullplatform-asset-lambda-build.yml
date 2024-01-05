@@ -7,7 +7,7 @@ spec:
     arguments:
       default: build
     options:
-      default: ''
+      default: ""
     build-working-directory:
       default: .
     asset-working-directory:
@@ -17,7 +17,6 @@ spec:
     asset-name:
       default: main
 ---
-
 stages:
   - nullplatform-asset-lambda-build
 
@@ -48,7 +47,7 @@ nullplatform-asset-lambda-build:
       build_working_directory=$(sanitize_path "$[[ inputs.build-working-directory ]]")
       asset_working_directory=$(sanitize_path "$[[ inputs.asset-working-directory ]]")
       asset_output_directory=$(sanitize_path "$[[ inputs.asset-output-directory ]]")
-    - |+ 
+    - |+
       #build
       BUILD_WORKING_DIRECTORY=$build_working_directory
       ASSET_WORKING_DIRECTORY=$asset_working_directory
@@ -60,19 +59,19 @@ nullplatform-asset-lambda-build:
       else
         make_file_path="$build_working_directory"
         make_file_task="build"
-      
+
         build_command="make -C $make_file_path"
-      
+
         if [ "$[[ inputs.arguments ]]" != "build" ]; then
           build_command="$build_command $[[ inputs.arguments ]]"
         else
           build_command="$build_command $make_file_task"
         fi
-      
+
         if [ -n "$[[ inputs.options ]]" ]; then
           build_command="$build_command $[[ inputs.options ]]"
         fi
-      
+
         eval $build_command \
         BUILD_WORKING_DIRECTORY=$BUILD_WORKING_DIRECTORY \
         ASSET_WORKING_DIRECTORY=$ASSET_WORKING_DIRECTORY \
@@ -85,3 +84,5 @@ nullplatform-asset-lambda-build:
     paths:
       - "$[[ inputs.asset-working-directory ]]/$[[ inputs.asset-output-directory ]]"
     expire_in: 30 min
+  except:
+    - tags

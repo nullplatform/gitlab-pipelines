@@ -7,7 +7,7 @@ spec:
     arguments:
       default: build
     options:
-      default: ''
+      default: ""
     build-working-directory:
       default: .
     asset-working-directory:
@@ -17,7 +17,6 @@ spec:
     asset-name:
       default: main
 ---
-
 stages:
   - nullplatform-asset-lambda-push
 
@@ -71,3 +70,5 @@ nullplatform-asset-lambda-push:
           ASSET_TYPE=$ASSET_TYPE \
           ASSET_TARGET_URL=$ASSET_URL
       done < assets-to-create.txt
+  except:
+    - tags

@@ -46,3 +46,5 @@ nullplatform-asset-lambda-create:
       - nullplatform-asset-create.json
       - assets-to-create.txt.enc
     expire_in: 30 min
+  except:
+    - tags

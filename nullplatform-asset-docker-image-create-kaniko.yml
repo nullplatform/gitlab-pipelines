@@ -56,3 +56,5 @@ nullplatform-asset-docker-image-create:
       - nullplatform-asset-create.json
       - assets-to-create.txt
     expire_in: 10 min
+  except:
+    - tags

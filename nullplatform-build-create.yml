@@ -30,3 +30,5 @@ nullplatform-build-create:
     paths:
       - nullplatform-build-create.json
     expire_in: 30 min
+  except:
+    - tags

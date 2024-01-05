@@ -23,3 +23,5 @@ nullplatform-application-metadata:
     paths:
       - nullplatform_application_metadata.json
     expire_in: 30 min
+  except:
+    - tags

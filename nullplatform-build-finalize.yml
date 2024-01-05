@@ -27,3 +27,5 @@ nullplatform-build-finalize:
     paths:
       - nullplatform-build-finalize.json
     expire_in: 30 min
+  except:
+    - tags

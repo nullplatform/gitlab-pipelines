@@ -12,8 +12,8 @@ nullplatform-asset-docker-image-build-and-push:
     entrypoint: [""]
   stage: nullplatform-asset-docker-image-build-and-push
   script:
-    -  mkdir -p /kaniko/.docker
-    - |+ 
+    - mkdir -p /kaniko/.docker
+    - |+
       while IFS= read -r line; do
         for env_var in $line 
         do
@@ -30,3 +30,5 @@ nullplatform-asset-docker-image-build-and-push:
         fi
         /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $ASSET_URL
       done < assets-to-create.txt
+  except:
+    - tags

@@ -26,7 +26,7 @@ nullplatform-asset-docker-image-build-and-push:
           echo -n "{\"auths\":{\"$BUILD_AZURE_REGISTRY_LOGIN_SERVER\":{\"auth\":\"$BUILD_AZURE_REGISTRY_AUTH_TOKEN\"}}}" > /kaniko/.docker/config.json
         else
           BUILD_REGISTRY_AUTH_TOKEN=$(echo -n "$BUILD_DOCKER_REGISTRY_USERNAME:$BUILD_DOCKER_REGISTRY_PASSWORD" | base64 | tr -d \\n)
-          echo -n "{\"auths\":{\"$BUILD_DOCKER_REGISTRY_SERVER\":{\"auth\":\"BUILD_REGISTRY_AUTH_TOKEN\"}}}" > /kaniko/.docker/config.json
+          echo -n "{\"auths\":{\"$BUILD_DOCKER_REGISTRY_SERVER\":{\"auth\":\"$BUILD_REGISTRY_AUTH_TOKEN\"}}}" > /kaniko/.docker/config.json
         fi
         /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $ASSET_URL
       done < assets-to-create.txt

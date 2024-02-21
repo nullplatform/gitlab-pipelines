@@ -1,9 +1,3 @@
-spec:
-  inputs:
-    status:
-      default: successful
-
----
 stages:
   - nullplatform-build-finalize
 
@@ -23,10 +17,9 @@ nullplatform-build-finalize:
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
     - |+
+      BUILD_STATUS="failed";
       if [ "$CI_JOB_STATUS" = "success" ]; then
         BUILD_STATUS="successful";
-      else
-        BUILD_STATUS="failed";
       fi
       while IFS= read -r line; do
         id=$(echo "$line" | jq -r '.id')

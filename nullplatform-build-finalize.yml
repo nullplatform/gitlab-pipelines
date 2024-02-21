@@ -22,10 +22,16 @@ nullplatform-build-finalize:
     - openssl enc -d -iter 1000 -aes-256-cbc -in nullplatform_login.response.json.enc -out nullplatform_login.response.json -k "$NULLPLATFORM_ENCRIPTION_KEY"
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
+    - if [ "$CI_JOB_STATUS" = "success" ]; then
+        BUILD_STATUS="successful";
+      else
+        BUILD_STATUS="failed";
+      fi
+    - echo "Status: $status"
     - |+
       while IFS= read -r line; do
         id=$(echo "$line" | jq -r '.id')
-        NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"$[[ inputs.status ]]\"}"
+        NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"$BUILD_STATUS\"}"
         NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl --fail --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
         printf "%s\n" $NULLPLATFORM_BUILD_UPDATE_RESPONSE >> nullplatform-build-finalize.json
       done < nullplatform-build-create.json

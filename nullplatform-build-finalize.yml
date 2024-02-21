@@ -1,3 +1,9 @@
+spec:
+  inputs:
+    status:
+      default: successful
+
+---
 stages:
   - nullplatform-build-finalize
 
@@ -17,13 +23,9 @@ nullplatform-build-finalize:
     - ACCESS_TOKEN=$(cat nullplatform_login.response.json | jq -r '.access_token')
   script:
     - |+
-      BUILD_STATUS="failed";
-      if [ "$CI_JOB_STATUS" = "success" ]; then
-        BUILD_STATUS="successful";
-      fi
       while IFS= read -r line; do
         id=$(echo "$line" | jq -r '.id')
-        NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"$BUILD_STATUS\"}"
+        NULLPLATFORM_BUILD_UPDATE_BODY="{\"status\":\"$[[ inputs.status ]]\"}"
         NULLPLATFORM_BUILD_UPDATE_RESPONSE=$(curl --fail --http1.1 --retry 3 --retry-connrefused --retry-all-errors -X PATCH -H "$NULLPLATFORM_BUILD_HEADERS" -H "Authorization:Bearer $ACCESS_TOKEN" -d "$NULLPLATFORM_BUILD_UPDATE_BODY" $NULLPLATFORM_BUILD_URL/$id)
         printf "%s\n" $NULLPLATFORM_BUILD_UPDATE_RESPONSE >> nullplatform-build-finalize.json
       done < nullplatform-build-create.json
@@ -31,6 +33,5 @@ nullplatform-build-finalize:
     paths:
       - nullplatform-build-finalize.json
     expire_in: 30 min
-  when: always
   except:
     - tags
